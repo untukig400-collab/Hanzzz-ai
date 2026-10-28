@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07152f">
+<title>HANZZZ AI</title>
+<style>
+:root{--bg:#061126;--panel:#0b1d3b;--panel2:#10284e;--blue:#3295ff;--cyan:#65d7ff;--text:#edf5ff;--muted:#9eb4d4}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#12366b 0,#061126 48%,#030914 100%);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100dvh}
+.app{max-width:820px;margin:auto;min-height:100dvh;display:flex;flex-direction:column;padding:0 14px}
+header{display:flex;align-items:center;gap:12px;padding:18px 4px;border-bottom:1px solid #23416b;position:sticky;top:0;background:#07152feF;backdrop-filter:blur(12px);z-index:2}
+.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#2e8cff,#62d9ff);display:grid;place-items:center;color:#04142b;font-weight:1000;font-size:20px;box-shadow:0 0 24px #3295ff55}
+.brand{font-weight:900;letter-spacing:1.2px;font-size:18px}.sub{color:var(--muted);font-size:12px}.online{margin-left:auto;color:#76e5c0;font-size:12px}
+main{flex:1;padding:26px 0 18px}.welcome{text-align:center;margin:28px 0 26px}.orb{margin:auto auto 16px;width:76px;height:76px;border-radius:24px;display:grid;place-items:center;background:linear-gradient(145deg,#2f8dff,#6bdcff);color:#06152f;font-size:31px;font-weight:1000;box-shadow:0 0 40px #3295ff45}.welcome h1{font-size:28px;margin:0 0 6px;letter-spacing:.5px}.welcome p{margin:0;color:var(--muted);font-size:14px}
+.suggestions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:20px 0}.suggestion{background:#0b1d3bcc;border:1px solid #28466e;border-radius:16px;padding:13px;text-align:left;color:var(--text);font:inherit;font-size:13px;cursor:pointer}.suggestion:hover{border-color:var(--blue);background:#10284e}
+#chat{display:flex;flex-direction:column;gap:16px}.msg{display:flex;gap:10px;align-items:flex-start}.avatar{flex:0 0 32px;height:32px;border-radius:11px;background:#123b72;display:grid;place-items:center;font-size:12px;font-weight:900;color:#8bdfff}.msg.user .avatar{background:#234c83;color:white}.bubble{max-width:calc(100% - 42px);background:#0c1e3a;border:1px solid #1c385f;border-radius:4px 16px 16px 16px;padding:12px 14px;white-space:pre-wrap;overflow-wrap:anywhere}.msg.user{flex-direction:row-reverse}.msg.user .bubble{background:#123d73;border-color:#2867a8;border-radius:16px 4px 16px 16px}.label{font-size:11px;color:#91b7e7;margin-bottom:4px;font-weight:800;letter-spacing:.5px}.typing{color:var(--muted);font-size:13px}
+footer{padding:12px 0 max(16px,env(safe-area-inset-bottom));position:sticky;bottom:0;background:linear-gradient(0deg,#061126 75%,transparent)}.composer{display:flex;align-items:flex-end;gap:9px;background:#0b1d3b;border:1px solid #2a4b78;border-radius:20px;padding:8px;box-shadow:0 8px 28px #0003}.composer:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px #3295ff20}textarea{flex:1;resize:none;max-height:140px;min-height:42px;border:0;outline:0;background:transparent;color:var(--text);font:inherit;padding:9px 7px}textarea::placeholder{color:#8299ba}.send{width:43px;height:43px;flex:0 0 43px;border:0;border-radius:14px;background:linear-gradient(135deg,#3295ff,#65d7ff);color:#03132b;font-size:20px;font-weight:900;cursor:pointer}.send:disabled{opacity:.45;cursor:wait}.fine{text-align:center;color:#7189ac;font-size:11px;margin:9px 0 0}.error{color:#ffb7b7}
+@media(max-width:430px){.welcome h1{font-size:25px}.suggestion{font-size:12px;padding:11px}.app{padding:0 11px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">H</div><div><div class="brand">HANZZZ AI</div><div class="sub">Asisten AI pribadi kamu</div></div><div class="online">● ONLINE</div></header>
+<main>
+<section class="welcome" id="welcome"><div class="orb">AI</div><h1>Halo, Hanzzz 👋</h1><p>Ada yang bisa aku bantu hari ini?</p>
+<div class="suggestions">
+<button class="suggestion" data-prompt="Bantu aku bikin ide konten yang keren.">✦ Ide konten keren</button>
+<button class="suggestion" data-prompt="Jelaskan AI dengan bahasa sederhana.">◈ Belajar tentang AI</button>
+<button class="suggestion" data-prompt="Buatkan kode HTML website modern berwarna biru.">⌘ Bantu coding</button>
+<button class="suggestion" data-prompt="Buatkan caption singkat yang menarik.">✎ Buat caption</button>
+</div></section>
+<section id="chat" aria-live="polite"></section>
+</main>
+<footer><form id="form" class="composer"><textarea id="prompt" placeholder="Tanya apa saja ke Hanzzz AI..." rows="1" required></textarea><button class="send" id="send" aria-label="Kirim" type="submit">➤</button></form><div class="fine">HANZZZ AI dapat membuat kesalahan. Periksa informasi penting.</div></footer>
+</div>
+<script>
+const form=document.querySelector('#form'), input=document.querySelector('#prompt'), send=document.querySelector('#send'), chat=document.querySelector('#chat'), welcome=document.querySelector('#welcome');
+function addMsg(role,text){const row=document.createElement('div');row.className='msg '+(role==='user'?'user':'assistant');const avatar=document.createElement('div');avatar.className='avatar';avatar.textContent=role==='user'?'K':'AI';const bubble=document.createElement('div');bubble.className='bubble';if(role!=='user'){const label=document.createElement('div');label.className='label';label.textContent='HANZZZ AI';bubble.append(label)}const content=document.createElement('div');content.textContent=text;bubble.append(content);row.append(avatar,bubble);chat.append(row);row.scrollIntoView({behavior:'smooth',block:'end'});return content}
+async function ask(text){if(!text.trim()||send.disabled)return;welcome.style.display='none';addMsg('user',text.trim());input.value='';input.style.height='auto';send.disabled=true;const answer=addMsg('assistant','Sedang berpikir...');answer.className='typing';try{const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text.trim()})});const data=await res.json();if(!res.ok)throw new Error(data.error||'Permintaan gagal.');answer.className='';answer.textContent=data.reply||'Belum ada jawaban.'}catch(e){answer.className='error';answer.textContent='Belum bisa terhubung: '+e.message+'\\nPastikan server aktif dan API key sudah dipasang.'}finally{send.disabled=false;input.focus()}}
+form.addEventListener('submit',e=>{e.preventDefault();ask(input.value)});input.addEventListener('input',()=>{input.style.height='auto';input.style.height=Math.min(input.scrollHeight,140)+'px'});input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});document.querySelectorAll('[data-prompt]').forEach(b=>b.addEventListener('click',()=>ask(b.dataset.prompt)));
+</script>
+</body>
+</html>
